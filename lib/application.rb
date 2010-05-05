@@ -3,6 +3,8 @@
 
 require 'rubygems'
 require 'hotcocoa'
+gem 'twitter'
+require 'twitter'
 
 # Replace the following code with your own hotcocoa code
 
@@ -15,13 +17,19 @@ class Application
       app.delegate = self
       window :frame => [100, 100, 500, 500], :title => "海ペンギン", do |win|
       t = text_field(layout: {expand: :width, start: false})
+      user = text_field()
+      pass = text_field()
       btn = button(title: "R", layout: {align: :top, start: false})
       btn.on_action { t.stringValue = "reloaded" }
         win << label(:text => "Hello from HotCocoa", :layout => {:start => true})
       	win << t
-
+        win << user
+        win << pass
         win << btn
         win.will_close { exit }
+      httpauth = Twitter::HTTPAuth.new("zakuni", "ishimoto")
+      base = Twitter::Base.new(httpauth)
+      base.update('test from macruby')
       end
     end
   end
