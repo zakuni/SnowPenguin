@@ -14,7 +14,7 @@ class Application
     application :name => "海ペンギン" do |app|
       app.delegate = self
       window :frame => [100, 100, 500, 500], :title => "海ペンギン", do |win|
-      t = text_field(layout: {expand: :width, start: false})
+      t = text_field(layout: {expand: :width})
       btn = button(title: "R", layout: {align: :top})
       btn.on_action { t.stringValue = "reloaded" }
         win << label(:text => "Hello from HotCocoa", :layout => {:start => true})
