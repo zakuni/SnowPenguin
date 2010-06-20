@@ -25,11 +25,12 @@ simple_oauth = SimpleOAuth.new(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRE
 
 # Tweetの投稿
 
-response = simple_oauth.post('http://twitter.com/statuses/update.json', {
-  :status => "くそう、なんて汚いコードだ"
+if ARGV[0] != nil
+  response = simple_oauth.post('http://twitter.com/statuses/update.json', {
+  :status => ARGV[0]
 })
-raise "Request failed: #{response.code}" unless response.code.to_i == 200
-
+  raise "Request failed: #{response.code}" unless response.code.to_i == 200
+end
 
 # TimeLineの取得
 response = simple_oauth.get('http://twitter.com/statuses/friends_timeline.json?count=10')
