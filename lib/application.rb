@@ -1,10 +1,8 @@
-#-*- coding:utf-8 -*-
-# 2010/2/8 作成
-
+# -*- coding: utf-8 -*-
 require 'rubygems'
 require 'hotcocoa'
-gem 'twitter'
-require 'twitter'
+require 'simple-oauth'
+require 'json'
 
 # Replace the following code with your own hotcocoa code
 
@@ -12,24 +10,37 @@ class Application
 
   include HotCocoa
   
+  
+  ary = Array.new
+
+  open("key.csv"){|file|
+    ary = file.readlines
+  }
+    
+  ary.each{ |line|
+    line.chomp!
+  }
+  
+  CONSUMER_KEY = ary[0]
+  CONSUMER_SECRET = ary[1]
+  TOKEN = ary[2]
+  TOKEN_SECRET = ary[3]
+
+  def twitter
+    simple_oauth = SimpleOAuth.new(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET)
+    response = simple_oauth.post('http://twitter.com/statuses/update.json', {
+                                   :status => "ぬうう"
+                                 })
+  end
+
   def start
-    application :name => "海ペンギン" do |app|
+    application :name => "Umipenguin" do |app|
+      tweet = "ツイート"
+      print tweet
       app.delegate = self
-      window :frame => [100, 100, 500, 500], :title => "海ペンギン", do |win|
-      t = text_field(layout: {expand: :width, start: false})
-      user = text_field()
-      pass = text_field()
-      btn = button(title: "R", layout: {align: :top, start: false})
-      btn.on_action { t.stringValue = "reloaded" }
-        win << label(:text => "Hello from HotCocoa", :layout => {:start => true})
-      	win << t
-        win << user
-        win << pass
-        win << btn
+      window :frame => [100, 100, 500, 500], :title => "Umipenguin" do |win|
+        win << label(:text => tweet, :layout => {:start => false})
         win.will_close { exit }
-      httpauth = Twitter::HTTPAuth.new("zakuni", "ishimoto")
-      base = Twitter::Base.new(httpauth)
-      base.update('test from macruby')
       end
     end
   end
