@@ -4,7 +4,9 @@ require 'hotcocoa'
 require 'simple-oauth'
 require 'json'
 
-# Replace the following code with your own hotcocoa code
+gem 'twitter'
+require 'twitter'
+
 
 class Application
 
@@ -25,18 +27,32 @@ class Application
   CONSUMER_SECRET = ary[1]
   TOKEN = ary[2]
   TOKEN_SECRET = ary[3]
+  
+#  simple_oauth = SimpleOAuth.new(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET)
+
+  oauth = Twitter::OAuth.new(CONSUMER_KEY, CONSUMER_SECRET)
+  oauth.authorize_from_access(TOKEN, TOKEN_SECRET)
+
+  client = Twitter::Base.new(oauth)
+
+  a = "macruby"
+#  client.update(a)
 
   def twitter
-    simple_oauth = SimpleOAuth.new(CONSUMER_KEY, CONSUMER_SECRET, TOKEN, TOKEN_SECRET)
+
+    
+=begin
     response = simple_oauth.post('http://twitter.com/statuses/update.json', {
                                    :status => "ぬうう"
                                  })
+=end
   end
 
   def start
     application :name => "Umipenguin" do |app|
       tweet = "ツイート"
-      print tweet
+#      client.update('チョコボの不思議なダンジョン２とか、今なら楽にクリアできるのかしら')
+      
       app.delegate = self
       window :frame => [100, 100, 500, 500], :title => "Umipenguin" do |win|
         win << label(:text => tweet, :layout => {:start => false})
